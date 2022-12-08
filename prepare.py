@@ -43,6 +43,14 @@ def index_time_data(df, date_col):
 
 # In[ ]:
 
-
+def prep_store_data(df):
+    df.sale_date = pd.to_datetime(df.sale_date)
+    # make sure we sort by date/time before resampling or doing other time series manipulations
+    df = df.set_index('sale_date').sort_index()
+    df = df.rename(columns={'sale_amount': 'quantity'})
+    df['month'] = df.index.strftime('%m-%b')
+    df['dow'] = df.index.strftime('%w-%a')
+    df['sales_total'] = df.quantity * df.item_price
+    return df
 
 
